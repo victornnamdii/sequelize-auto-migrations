@@ -6,7 +6,7 @@ This package provide two tools:
 * `runmigration` - tool for apply created by first tool migrations
 
 ## Install
-`npm install sequelize-auto-migrations`
+`npm install sequelize-auto-migrations-v2`
 
 ## Usage
 * Init sequelize, with sequelize-cli, using `sequelize init`

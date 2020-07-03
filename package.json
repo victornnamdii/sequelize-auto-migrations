@@ -1,6 +1,6 @@
 {
-  "name": "sequelize-auto-migrations",
-  "version": "1.0.3",
+  "name": "sequelize-auto-migrations-v2",
+  "version": "1.0.16",
   "description": "Sequelize migrations generator && runner",
   "main": "index.js",
   "private": false,
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/flexxnn/sequelize-auto-migrations.git"
+    "url": "git+https://github.com/brianschardt/sequelize-auto-migrations.git"
   },
   "keywords": [
     "sequelize",
