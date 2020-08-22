@@ -71,11 +71,11 @@ let migrationFiles = fs.readdirSync(migrationsDir)
     if (revA > revB) return 1;
     return 0;
   })
-  // remove all migrations before fromRevision
-  .filter((file) => {
-    let rev = parseInt(path.basename(file).split('-', 2)[0]);
-    return (rev >= fromRevision);
-  });
+// remove all migrations before fromRevision
+// .filter((file) => {
+//   let rev = parseInt(path.basename(file).split('-', 2)[0]);
+//   return (rev >= fromRevision);
+// });
 
 
 if (options.list)
