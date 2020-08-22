@@ -97,21 +97,17 @@ async function executeSql(queryInterface, sql) {
   migrationFiles.forEach((file) => {
     console.log("\t" + file);
   });
-  Async.eachSeries(migrationFiles,
-    function (file, cb) {
-      console.log("Execute migration from file: " + file);
-      migrate.executeMigration(queryInterface, path.join(migrationsDir, file), fromPos, (err) => {
-        if (stop)
-          return cb("Stopped");
 
-        cb(err);
-      });
-      // set pos to 0 for next migration
-      fromPos = 0;
-    },
-    function (err) {
-      console.log(err);
-      process.exit(0);
-    }
-  );
+  for (let file of migrationFiles) {
+    await migrate.executeMigration(queryInterface, path.join(migrationsDir, file), fromPos);
+    await executeSql(queryInterface, `INSERT INTO "SequelizeMeta" ("name") VALUES ('${file}')`);
+    fromPos = 0;
+  }
+
+  if (migrationFiles.length == 0) {
+    console.log('No new migration files found');
+  } else {
+    console.log('Completed running migrations');
+  }
+  process.exit(0);
 })();
