@@ -77,29 +77,41 @@ let migrationFiles = fs.readdirSync(migrationsDir)
     return (rev >= fromRevision);
   });
 
-console.log("Migrations to execute:");
-migrationFiles.forEach((file) => {
-  console.log("\t" + file);
-});
 
 if (options.list)
   process.exit(0);
 
+async function executeSql(queryInterface, sql) {
+  return queryInterface.sequelize.query(
+    sql, {
+    type: queryInterface.sequelize.QueryTypes.SELECT
+  });
+}
 
-Async.eachSeries(migrationFiles,
-  function (file, cb) {
-    console.log("Execute migration from file: " + file);
-    migrate.executeMigration(queryInterface, path.join(migrationsDir, file), fromPos, (err) => {
-      if (stop)
-        return cb("Stopped");
+(async () => {
+  let res = await executeSql(queryInterface, 'select * from "SequelizeMeta"');
+  let ranMigrations = res.map(r => r.name);
+  migrationFiles = migrationFiles.filter(mf => {
+    return (!ranMigrations.includes(mf));
+  })
+  migrationFiles.forEach((file) => {
+    console.log("\t" + file);
+  });
+  Async.eachSeries(migrationFiles,
+    function (file, cb) {
+      console.log("Execute migration from file: " + file);
+      migrate.executeMigration(queryInterface, path.join(migrationsDir, file), fromPos, (err) => {
+        if (stop)
+          return cb("Stopped");
 
-      cb(err);
-    });
-    // set pos to 0 for next migration
-    fromPos = 0;
-  },
-  function (err) {
-    console.log(err);
-    process.exit(0);
-  }
-);
+        cb(err);
+      });
+      // set pos to 0 for next migration
+      fromPos = 0;
+    },
+    function (err) {
+      console.log(err);
+      process.exit(0);
+    }
+  );
+})();
