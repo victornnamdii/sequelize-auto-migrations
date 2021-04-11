@@ -90,7 +90,7 @@ async function executeSql(queryInterface, sql) {
 
 (async () => {
   let createIfNot = await executeSql(queryInterface,
-    'CREATE TABLE IF NOT EXISTS "SequelizeMeta" (name integer UNIQUE)'
+    'CREATE TABLE IF NOT EXISTS "SequelizeMeta" (name varchar UNIQUE)'
     );
   let res = await executeSql(queryInterface, 'select * from "SequelizeMeta"');
   let ranMigrations = res.map(r => r.name);
