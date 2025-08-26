@@ -161,7 +161,7 @@ let info = migrate.writeMigration(
   currentState.revision,
   migration,
   migrationsDir,
-  options.name ? options.name : getDateTime(),
+  options.name ? `${options.name}_getDateTime()` : getDateTime(),
   options.comment ? options.comment : ""
 );
 
